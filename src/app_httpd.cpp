@@ -26,6 +26,9 @@ extern int lampVal;        // The current Lamp value
 extern int lampChannel;    // PWM channel Lamp is attached to 
 extern float lampR;        // The R value in the graph equation
 
+// Motor functionsk
+void updateMotors();
+
 // Info we pass to the webapp
 extern char myName[];
 extern char myVer[];
@@ -58,6 +61,9 @@ typedef struct {
         httpd_req_t *req;
         size_t len;
 } jpg_chunking_t;
+
+float current_speed_left = 0.0;
+float current_speed_right = 0.0;
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
@@ -507,6 +513,24 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     }
     else if(!strcmp(variable, "quality")) res = s->set_quality(s, val);
     else if(!strcmp(variable, "contrast")) res = s->set_contrast(s, val);
+    else if (!strcmp(variable, "motor_left")) {
+        current_speed_left = std::max(-1.0f, std::min(1.0f, (float) atof(value)));
+        //motors.drive(current_speed_left, current_speed_right, 0);
+    }
+    else if (!strcmp(variable, "motor_right")) {
+        current_speed_right = std::max(-1.0f, std::min(1.0f, (float) atof(value)));
+        //motors.drive(current_speed_left, current_speed_right, 0);
+    }
+    else if (!strcmp(variable, "motor_both")) {
+        char value2[32] = {0,};
+        if (httpd_query_key_value(buf, "val2", value2, sizeof(value2)) == ESP_OK) {
+            current_speed_right = std::max(-1.0f, std::min(1.0f, (float) atof(value)));
+            current_speed_left = std::max(-1.0f, std::min(1.0f, (float) atof(value2)));
+            //motors.drive(current_speed_left, current_speed_right, 0);
+            Serial.printf("Motor left: %f - right %f \n",(float) atof(value), (float) atof(value2));
+            updateMotors();
+        }
+    }
     else if(!strcmp(variable, "brightness")) res = s->set_brightness(s, val);
     else if(!strcmp(variable, "saturation")) res = s->set_saturation(s, val);
     else if(!strcmp(variable, "gainceiling")) res = s->set_gainceiling(s, (gainceiling_t)val);
@@ -695,4 +719,23 @@ void startCameraServer(){
     if (httpd_start(&stream_httpd, &config) == ESP_OK) {
         httpd_register_uri_handler(stream_httpd, &stream_uri);
     }
+}
+
+void updateMotors(){
+
+
+  // GPIO 12 - PWM A left
+  // GPIO 13 - PWM B right
+  // GPIO 14 - DIR A
+  // GPIO 15 - DIR B
+
+
+    if(abs(current_speed_left)>0.5){
+        digitalWrite(13, HIGH); 
+    }
+    abs(current_speed_left)>0.5 ? digitalWrite(12, HIGH) : digitalWrite(12, LOW);
+    abs(current_speed_right)>0.5 ? digitalWrite(13, HIGH) : digitalWrite(13, LOW);
+    current_speed_left > 0 ? digitalWrite(14, HIGH) : digitalWrite(14, LOW);
+    current_speed_right > 0 ? digitalWrite(15, HIGH) : digitalWrite(15, LOW);
+  
 }

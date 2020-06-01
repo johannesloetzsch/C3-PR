@@ -67,6 +67,7 @@ const int pwmIntervals = 100;  // The number of Steps between the output being o
 float lampR;                   // The R value in the PWM graph equation (calculated in setup)
 
 void startCameraServer();
+void flashLED(int flashtime);
 
 void setup() {
   Serial.begin(115200);
@@ -150,6 +151,25 @@ void setup() {
   s->set_vflip(s, 1);
   s->set_hmirror(s, 1);
 #endif
+
+
+
+  // Mötör init
+  // TB6612FNG with 
+  // GPIO 12 - PWM A left
+  // GPIO 13 - PWM B right
+  // GPIO 14 - DIR A
+  // GPIO 15 - DIR B
+
+  pinMode(12, OUTPUT);
+  digitalWrite(12, LOW); 
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW); 
+  pinMode(14, OUTPUT);
+  digitalWrite(14, LOW); 
+  pinMode(15, OUTPUT);
+  digitalWrite(15, LOW); 
+
 
   // Feedback that hardware init is complete and we are now attempting to connect
   Serial.println("");

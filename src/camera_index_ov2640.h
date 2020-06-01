@@ -354,6 +354,41 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
                 padding: 1px 4px 2px 4px;
             }
 
+            #container {
+                  min-width: 500px;
+                  width:100%;
+                  height: 400px;
+                  background-color: #333;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  overflow: hidden;
+                  border-radius: 7px;
+                  touch-action: none;
+            }
+            
+            #item {
+                  width: 100px;
+                  height: 100px;
+                  background-color: #f21c21;
+                  border: 10px solid rgba(136, 136, 136, .5);
+                  border-radius: 50%;
+                  touch-action: none;
+                  user-select: none;
+            }
+            
+            #item:active {
+                  background-color: rgba(168, 218, 220, 1.00);
+            }
+            
+            #item:hover {
+                  cursor: pointer;
+                  border-width: 20px;
+            }
+
+
+
+
         </style>
     </head>
     <body>
@@ -590,11 +625,23 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
                         <img id="stream" src="">
                     </div>
                 </figure>
+                <div>For control use w a s d x</div>
+                <!-- NOT FUNCTIONAL YET
+                <figure>             
+                  <div id="outerContainer">
+                    <div id="container">
+                      <div id="item">
+                      </div>
+                    </div>
+                  </div>
+                </figure>  
+                NOT FUNCTIONAL YET -->
             </div>
         </section>
     </body>
 
     <script>
+    
 document.addEventListener('DOMContentLoaded', function (event) {
   var baseHost = document.location.origin
   var streamUrl = baseHost + ':81'
@@ -847,10 +894,115 @@ document.addEventListener('DOMContentLoaded', function (event) {
       disable(enrollButton)
     }
   }
+
+
+
+
+document.addEventListener('keypress', (e) => {
+  mleft = 0;
+  mright = 0;
+  if (e.key === "s") {
+    mleft = 0;
+    mright = 0;
+  }
+  if (e.key === "w") {
+    mleft = 1;
+    mright = 1;
+  }
+  if (e.key === "x") {
+    mleft = -1;
+    mright = -1;
+  }
+  if (e.key === "a") {
+    mleft = -1;
+    mright = 1;
+  }
+  if (e.key === "d") {
+    mleft =  1;
+    mright = -1;
+  }
+  
+  fetch(`${baseHost}/control?var=motor_both&val=`+mleft+`&val2=`+mright)
+          .then(response => {
+            console.log(`request finished, status: ${response.status}`)
+        })
+});
+
+
+/* not functional yet, would work but motor speed computation is wrong
+  var dragItem = document.querySelector("#item");
+    var container = document.querySelector("#container");
+
+    var active = false;
+    var currentX;
+    var currentY;
+    var initialX;
+    var initialY;
+    var xOffset = 0;
+    var yOffset = 0;
+
+    container.addEventListener("touchstart", dragStart, false);
+    container.addEventListener("touchend", dragEnd, false);
+    container.addEventListener("touchmove", drag, false);
+
+    container.addEventListener("mousedown", dragStart, false);
+    container.addEventListener("mouseup", dragEnd, false);
+    container.addEventListener("mousemove", drag, false);
+
+    function dragStart(e) {
+      if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - xOffset;
+        initialY = e.touches[0].clientY - yOffset;
+      } else {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+      }
+
+      if (e.target === dragItem) {
+        active = true;
+      }
+    }
+
+    function dragEnd(e) {
+      initialX = currentX;
+      initialY = currentY;
+
+      active = false;
+    }
+
+    function drag(e) {
+      if (active) {
+      
+        e.preventDefault();
+      
+        if (e.type === "touchmove") {
+          currentX = e.touches[0].clientX - initialX;
+          currentY = e.touches[0].clientY - initialY;
+        } else {
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+        }
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        setTranslate(currentX, currentY, dragItem);
+        console.log(initialX,initialY,currentX,currentY);
+        console.log(currentX/initialX,currentY/initialY);
+               
+        fetch(`${baseHost}/control?var=motor_both&val=`+(currentX/initialX)+`&val2=`+(currentY/initialY))
+          .then(response => {
+            console.log(`request finished, status: ${response.status}`)
+        })
+      }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+      el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+    }
+  */
 })
-
     </script>
-
 </html>
 )=====";
 size_t index_ov2640_html_len = sizeof(index_ov2640_html);
