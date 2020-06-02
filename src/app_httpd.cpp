@@ -20,14 +20,18 @@
 #include "camera_index_ov2640.h"
 #include "camera_index_ov3660.h"
 
+#include "robot_pins.h"
+
 // Function+Globals needed for led and Lamp levels
 void flashLED(int flashtime); 
 extern int lampVal;        // The current Lamp value
 extern int lampChannel;    // PWM channel Lamp is attached to 
 extern float lampR;        // The R value in the graph equation
 
-// Motor functionsk
+// Motor functions
 void updateMotors();
+float current_speed_left = 0.0;
+float current_speed_right = 0.0;
 
 // Info we pass to the webapp
 extern char myName[];
@@ -61,9 +65,6 @@ typedef struct {
         httpd_req_t *req;
         size_t len;
 } jpg_chunking_t;
-
-float current_speed_left = 0.0;
-float current_speed_right = 0.0;
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
@@ -721,21 +722,15 @@ void startCameraServer(){
     }
 }
 
+
+// set motor directions and toggle motors on/off
+// TODO: control motor speed with PWM
+// TODO: fix bad SoC, this routine has nothing to do with the web server
 void updateMotors(){
-
-
-  // GPIO 12 - PWM A left
-  // GPIO 13 - PWM B right
-  // GPIO 14 - DIR A
-  // GPIO 15 - DIR B
-
-
-    if(abs(current_speed_left)>0.5){
-        digitalWrite(13, HIGH); 
-    }
-    abs(current_speed_left)>0.5 ? digitalWrite(12, HIGH) : digitalWrite(12, LOW);
-    abs(current_speed_right)>0.5 ? digitalWrite(13, HIGH) : digitalWrite(13, LOW);
-    current_speed_left > 0 ? digitalWrite(14, HIGH) : digitalWrite(14, LOW);
-    current_speed_right > 0 ? digitalWrite(15, HIGH) : digitalWrite(15, LOW);
-  
+    // motor is switched on if the speed is >0.5 or <-0.5, else motor off
+    abs(current_speed_left)>0.5 ? digitalWrite(MOTOR_L_PWM, HIGH) : digitalWrite(MOTOR_L_PWM, LOW);
+    abs(current_speed_right)>0.5 ? digitalWrite(MOTOR_R_PWM, HIGH) : digitalWrite(MOTOR_R_PWM, LOW);
+    // directions depends on whether speed is negative or positive
+    current_speed_left > 0 ? digitalWrite(MOTOR_L_DIR, HIGH) : digitalWrite(MOTOR_L_DIR, LOW);
+    current_speed_right > 0 ? digitalWrite(MOTOR_R_DIR, HIGH) : digitalWrite(MOTOR_R_DIR, LOW);
 }

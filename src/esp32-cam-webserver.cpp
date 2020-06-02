@@ -1,4 +1,5 @@
 #include "esp_camera.h"
+#include "robot_pins.h"
 #include <WiFi.h>
 
 /* This sketch is a extension/expansion/reork of the 'official' ESP32 Camera example
@@ -152,23 +153,15 @@ void setup() {
   s->set_hmirror(s, 1);
 #endif
 
-
-
   // Mötör init
-  // TB6612FNG with 
-  // GPIO 12 - PWM A left
-  // GPIO 13 - PWM B right
-  // GPIO 14 - DIR A
-  // GPIO 15 - DIR B
-
-  pinMode(12, OUTPUT);
-  digitalWrite(12, LOW); 
-  pinMode(13, OUTPUT);
-  digitalWrite(13, LOW); 
-  pinMode(14, OUTPUT);
-  digitalWrite(14, LOW); 
-  pinMode(15, OUTPUT);
-  digitalWrite(15, LOW); 
+  pinMode(MOTOR_L_PWM, OUTPUT);
+  digitalWrite(MOTOR_L_PWM, LOW); //off
+  pinMode(MOTOR_R_PWM, OUTPUT);
+  digitalWrite(MOTOR_R_PWM, LOW); //off
+  pinMode(MOTOR_L_DIR, OUTPUT);
+  digitalWrite(MOTOR_L_DIR, LOW); 
+  pinMode(MOTOR_R_DIR, OUTPUT);
+  digitalWrite(MOTOR_R_DIR, LOW); 
 
 
   // Feedback that hardware init is complete and we are now attempting to connect
