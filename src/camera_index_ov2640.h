@@ -414,8 +414,8 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
                                 <option value="10">UXGA(1600x1200)</option>
                                 <option value="9">SXGA(1280x1024)</option>
                                 <option value="8">XGA(1024x768)</option>
-                                <option value="7" selected="selected">SVGA(800x600)</option>
-                                <option value="6">VGA(640x480)</option>
+                                <option value="7">SVGA(800x600)</option>
+                                <option value="6" selected="selected">VGA(640x480)</option>
                                 <option value="5">CIF(400x296)</option>
                                 <option value="4">QVGA(320x240)</option>
                                 <option value="3">HQVGA(240x176)</option>
