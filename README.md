@@ -1,8 +1,6 @@
-# Espressives ESP32-CAM example revisited.
-## Taken from the ESP examples, and modified for reality
-This sketch is a extension/expansion/rework of the 'official' ESP32 Camera example sketch from Espressif:
+# C3 Presence Robot
+A simple and affordable telepresence experimentation platform. Based on the [Espressives ESP32-CAM example revisited](https://github.com/easytarget/esp32-cam-webserver) which in itself is a rework of the ['official' ESP32 Camera example sketch](https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer) from Espressif.
 
-https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer
 
 - The example they have is nice, but a bit incomprehensible and hard to modify as supplied. It is very focused on showing off the face recognition capabilities, and forgets the 'webcam' part.
 - There are many other variants of a webcam server for these modules online, but most are created for a specific scenario and not good for general, casual, webcam use.
