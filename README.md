@@ -5,7 +5,7 @@ A simple and affordable telepresence experimentation platform. Based on the [Esp
 - The example they have is nice, but a bit incomprehensible and hard to modify as supplied. It is very focused on showing off the face recognition capabilities, and forgets the 'webcam' part.
 - There are many other variants of a webcam server for these modules online, but most are created for a specific scenario and not good for general, casual, webcam use.
 
-![My Gods, it's full of cats!](Docs/mygodsitsfullofcats.png)
+![My Gods, it's full of cats!](docs/mygodsitsfullofcats.png)
 
 Hopefully this expanded example is more useful for those users who wish to set up a simple ESP32 based webcam using the cheap(ish) modules freely available online. Especially the AI-THINKER board:
 
@@ -34,7 +34,7 @@ https://randomnerdtutorials.com/esp32-cam-troubleshooting-guide/
 ### Wiring
 
 Is pretty simple, see the diagram below.
-![Hoockup](Docs/hookup.png)
+![Hoockup](docs/hookup.png)
 * Connect the **RX** line from the serial adapter to the **TX** pin on ESP32
 * The adapters **TX** line goes to the ESP32 **RX** pin
 * The **GPIO0** pin of the ESP32 must be held LOW (to ground) when the unit is powered up to allow it to enter it's programming mode. This can be done with simple jumper cable connected at poweron, fitting a switch for this is useful if you will be reprogramming a lot.
@@ -50,7 +50,7 @@ You can also set the camera name plus SSID and password for your WiFi network in
 
 Assuming you are using the latest Espressif Arduino core the AI-THINKER board will appear in the ESP32 Arduino section of the boards list. 
 
-![IDE board config](Docs/board-selection-small.png)
+![IDE board config](docs/board-selection-small.png)
 
 Compile and upload the code from the IDE, when the `Connecting...` appears in the console reboot the ESP32 module while keeping **GPIO0** grounded. You can release GPO0 once the sketch is uploading, most boards have a 'boot' button to trigger a reboot.
 
@@ -78,7 +78,7 @@ I would also like to shoutout to @jmfloyd; who suggested rotating the image in t
 * I created a small board with a handy switch for power, a pushbutton for the GPIO0 programming switch, and a socket for the AI-THINKER board. This proved very useful for development work and programming multiple devices.
 * I found some excellent [cases on Thingieverse](https://www.thingiverse.com/thing:3708345).
 
-![Cameras and a Programmer](Docs/webcams.programmer.jpg)
+![Cameras and a Programmer](docs/webcams.programmer.jpg)
 
 ## Plans
 * Improve Wifi, add a captive portal for setup and fallback, better disconnect/reconnect behaviour.
