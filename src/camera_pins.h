@@ -1,4 +1,4 @@
-// Pin definitions for soem common ESP-CAM modules
+// Pin definitions for some common ESP-CAM modules
 
 // ESP WROVER 
 // https://dl.espressif.com/dl/schematics/ESP-WROVER-KIT_SCH-2.pdf
