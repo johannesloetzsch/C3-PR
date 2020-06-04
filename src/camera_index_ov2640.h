@@ -1,7 +1,7 @@
 //File: index_ov2640.html
 const uint8_t index_ov2640_html[] PROGMEM = R"=====(
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -608,7 +608,10 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
                         <img id="stream" src="">
                     </div>
                 </figure>
-                <div>For control use w a s d x</div>
+            </div>
+        </section>
+        <section>
+            <div>For control use w a s d x</div>
                 <!-- NOT FUNCTIONAL YET
                 <figure>             
                   <div id="outerContainer">
@@ -620,15 +623,23 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
                 </figure>  
                 NOT FUNCTIONAL YET -->
             </div>
+            <div id="gamepadPrompt"></div>
+            <div id="gamepadDisplay"></div>
         </section>
-    </body>
 
-    <script>
+
+        <script>
     
 document.addEventListener('DOMContentLoaded', function (event) {
   var baseHost = document.location.origin
   var streamUrl = baseHost + ':81'
+  // TODO: I'm quite positive that we should change that to 
+  // var streamUrl = document.location.protocol+'////'+document.location.hostname+':81'
+  // as .origin already can contain a port number
 
+  var supportsGamePad = false;
+  var repGP;
+   
   const hide = el => {
     el.classList.add('hidden')
   }
@@ -716,6 +727,36 @@ document.addEventListener('DOMContentLoaded', function (event) {
       .then(response => {
         console.log(`request to ${query} finished, status: ${response.status}`)
       })
+  }
+
+  function canGame() {
+    return "getGamepads" in navigator;
+  }
+
+  function reportOnGamepad() {
+    var gp = navigator.getGamepads()[0];
+    var html = "";
+    html += "id: "+gp.id+"<br/>";
+      for(var i=0;i<gp.buttons.length;i++) {
+        html+= "Button "+(i+1)+": ";
+        if(gp.buttons[i].pressed) html+= " pressed";
+        html+= "<br/>";
+      }
+      for(var i=0;i<gp.axes.length; i+=2) {
+        html+= "Stick "+(Math.ceil(i/2)+1)+": "+gp.axes[i]+","+gp.axes[i+1]+"<br/>";
+      }
+    document.getElementById('gamepadDisplay').innerHTML=html;
+
+
+    // cave: Button 13,14,15,16 in chrome for logitech are axes[4] and axes[5] in firefox :-/
+    mleft = -gp.axes[1];
+    mright = -gp.axes[3];
+
+    fetch(`${baseHost}/control?var=motor_both&val=`+mleft+`&val2=`+mright)
+          .then(response => {
+            console.log(`request finished, status: ${response.status}`)
+        })
+
   }
 
   document
@@ -837,36 +878,54 @@ document.addEventListener('DOMContentLoaded', function (event) {
     updateConfig(framesize)
   }
 
-document.addEventListener('keypress', (e) => {
-  mleft = 0;
-  mright = 0;
-  if (e.key === "s") {
+  // control robot with keyboard keys
+  document.addEventListener('keypress', (e) => {
     mleft = 0;
     mright = 0;
-  }
-  if (e.key === "w") {
-    mleft = 1;
-    mright = 1;
-  }
-  if (e.key === "x") {
-    mleft = -1;
-    mright = -1;
-  }
-  if (e.key === "a") {
-    mleft = -1;
-    mright = 1;
-  }
-  if (e.key === "d") {
-    mleft =  1;
-    mright = -1;
-  }
-  
-  fetch(`${baseHost}/control?var=motor_both&val=`+mleft+`&val2=`+mright)
+    if (e.key === "s") {
+      mleft = 0;
+      mright = 0;
+    }
+    if (e.key === "w") {
+      mleft = 1;
+      mright = 1;
+    }
+    if (e.key === "x") {
+      mleft = -1;
+      mright = -1;
+    }
+    if (e.key === "a") {
+      mleft = -1;
+      mright = 1;
+    }
+    if (e.key === "d") {
+      mleft =  1;
+      mright = -1;
+    }
+    fetch(`${baseHost}/control?var=motor_both&val=`+mleft+`&val2=`+mright)
           .then(response => {
             console.log(`request finished, status: ${response.status}`)
         })
-});
+  });
 
+  if(canGame()) {
+    var prompt = "To use a gamepad, connect it and press any button!";
+    const gamepadPromptDiv =  document.getElementById('gamepadPrompt')
+    gamepadPromptDiv.innerHTML = prompt;
+    window.addEventListener('gamepadconnected', function() {
+                hasGP = true;
+                gamepadPromptDiv.innerHTML = 'Gamepad connected!';
+                console.log("gamepad connection event");
+                repGP = window.setInterval(reportOnGamepad,300);
+            });
+ 
+            window.addEventListener('gamepaddisconnected', function() {
+                console.log("gamepad disconnection event");
+                gamepadPromptDiv.innerHTML = prompt;
+                window.clearInterval(repGP);
+            });
+ 
+        }
 
 /* not functional yet, would work but motor speed computation is wrong
   var dragItem = document.querySelector("#item");
@@ -941,7 +1000,10 @@ document.addEventListener('keypress', (e) => {
     }
   */
 })
-    </script>
+
+        </script>
+    </body>
 </html>
+
 )=====";
 size_t index_ov2640_html_len = sizeof(index_ov2640_html);
