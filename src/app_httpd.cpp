@@ -446,14 +446,12 @@ void startCameraServer(){
 }
 
 
-// set motor directions and toggle motors on/off
-// TODO: control motor speed with PWM
+// set motor directions and speed 
 // TODO: fix bad SoC, this routine has nothing to do with the web server
 void updateMotors(){
-    // motor is switched on if the speed is >0.5 or <-0.5, else motor off
-    abs(current_speed_left)>0.5 ? digitalWrite(MOTOR_L_PWM, HIGH) : digitalWrite(MOTOR_L_PWM, LOW);
-    abs(current_speed_right)>0.5 ? digitalWrite(MOTOR_R_PWM, HIGH) : digitalWrite(MOTOR_R_PWM, LOW);
+    ledcWrite(MOTOR_L_PWM_CHAN, abs(current_speed_left)*1023);
+    ledcWrite(MOTOR_R_PWM_CHAN, abs(current_speed_right)*1023);
     // directions depends on whether speed is negative or positive
-    current_speed_left > 0 ? digitalWrite(MOTOR_L_DIR, HIGH) : digitalWrite(MOTOR_L_DIR, LOW);
-    current_speed_right > 0 ? digitalWrite(MOTOR_R_DIR, HIGH) : digitalWrite(MOTOR_R_DIR, LOW);
+    current_speed_left > 0 ? digitalWrite(MOTOR_L_DIR_PIN, HIGH) : digitalWrite(MOTOR_L_DIR_PIN, LOW);
+    current_speed_right > 0 ? digitalWrite(MOTOR_R_DIR_PIN, HIGH) : digitalWrite(MOTOR_R_DIR_PIN, LOW);
 }

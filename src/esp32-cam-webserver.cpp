@@ -60,11 +60,13 @@ char myVer[] PROGMEM = __DATE__ " @ " __TIME__;
   int lampVal = -1; // disable Lamp
 #endif         
 int lampChannel = 7;     // a free PWM channel (some channels used by camera)
+                        // according to https://esp32.com/viewtopic.php?t=11379 those are channel 1 and 2
 const int pwmfreq = 50000;     // 50K pwm frequency
 const int pwmresolution = 9;   // duty cycle bit range
 // https://diarmuid.ie/blog/pwm-exponential-led-fading-on-arduino-or-other-platforms
 const int pwmIntervals = 100;  // The number of Steps between the output being on and off
 float lampR;                   // The R value in the PWM graph equation (calculated in setup)
+
 
 void startCameraServer();
 void flashLED(int flashtime);
@@ -154,15 +156,18 @@ void setup() {
 #endif
 
   // Mötör init
-  pinMode(MOTOR_L_PWM, OUTPUT);
-  digitalWrite(MOTOR_L_PWM, LOW); //off
-  pinMode(MOTOR_R_PWM, OUTPUT);
-  digitalWrite(MOTOR_R_PWM, LOW); //off
-  pinMode(MOTOR_L_DIR, OUTPUT);
-  digitalWrite(MOTOR_L_DIR, LOW); 
-  pinMode(MOTOR_R_DIR, OUTPUT);
-  digitalWrite(MOTOR_R_DIR, LOW); 
-
+  pinMode(MOTOR_L_PWM_PIN, OUTPUT);
+  ledcSetup(MOTOR_L_PWM_CHAN, MOTOR_PWM_FREQ_HZ, MOTOR_PWM_RES_BIT);
+  ledcAttachPin(MOTOR_L_PWM_PIN, MOTOR_L_PWM_CHAN);
+  ledcWrite(MOTOR_L_PWM_CHAN, 0); //off
+  pinMode(MOTOR_R_PWM_PIN, OUTPUT);
+  ledcSetup(MOTOR_R_PWM_CHAN, MOTOR_PWM_FREQ_HZ, MOTOR_PWM_RES_BIT);
+  ledcAttachPin(MOTOR_R_PWM_PIN, MOTOR_R_PWM_CHAN);
+  ledcWrite(MOTOR_R_PWM_CHAN, 0); //off
+  pinMode(MOTOR_L_DIR_PIN, OUTPUT);
+  digitalWrite(MOTOR_L_DIR_PIN, LOW); 
+  pinMode(MOTOR_R_DIR_PIN, OUTPUT);
+  digitalWrite(MOTOR_R_DIR_PIN, LOW); 
 
   // Feedback that hardware init is complete and we are now attempting to connect
   Serial.println("");
