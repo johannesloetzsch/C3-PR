@@ -11,14 +11,17 @@ The current design uses the [AI-THINKER ESP32-CAM](https://github.com/raphaelbs/
 * For some other good examples and information on ESP32 based webcams I also recommend the sketches here:
 https://github.com/raphaelbs/esp32-cam-ai-thinker
 
-* ~~The AI thinker wiki can be quite informative, when run through an online translator and read sensibly:
-https://wiki.ai-thinker.com/esp32-cam~~ (This resource seems to be unavailable)
+* The AI thinker wiki can be quite informative, when run through an online translator and read sensibly:
+https://wiki.ai-thinker.com/esp32-cam
 
 #### Motor Driver Hardware
 
 Development of a small motor driver clip-on board is under way. If you want to get started now, wire your own [Dual TB6612FNG](https://www.sparkfun.com/products/14451) motor driver board in a way that AIN2 (BIN2) is the inverted signal of AIN1 (BIN1). We only have so many GPIOs, so we need to use them wisely.
 
 ![board prototype](docs/boardproto.png)
+![board prototype](docs/boardproto_real.png)
+
+See pcb folder for more information on shematics and gerber files.
 
 * A usefull guide to the ESP32-CAM GPIOs is https://randomnerdtutorials.com/esp32-cam-ai-thinker-pinout/
 
@@ -41,4 +44,3 @@ https://randomnerdtutorials.com/esp32-cam-troubleshooting-guide/
 * Over the air updates.
 * Improve motor control and UI, all this is currently very very basic.
 * Concurrent access to website and stream doesn't seem to work well (or at all). Fix this.
-* Provide good translation from joystick to differential drive, see https://www.impulseadventure.com/elec/robot-differential-steering.html
