@@ -25,6 +25,13 @@ See pcb folder for more information on shematics and gerber files.
 
 * A usefull guide to the ESP32-CAM GPIOs is https://randomnerdtutorials.com/esp32-cam-ai-thinker-pinout/
 
+#### Mechanical Parts
+
+Various designs for mechanical parts are under development.
+
+![grubby style design](mechanical/grubby/grubby_parts.png)
+
+
 ## Troubleshooting:
 
 Please read this excellent guide for help with common issues of the ESP32-CAM module:
