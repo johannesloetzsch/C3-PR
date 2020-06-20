@@ -47,7 +47,6 @@ https://randomnerdtutorials.com/esp32-cam-troubleshooting-guide/
 
 ## Plans
 * Improve Wifi, add a captive portal (e.g. [AutoConnect](https://github.com/Hieromon/AutoConnect) for setup.
-* Remove face rcognition stuff, it doesn't seem to work anyway.
 * Over the air updates.
 * Improve motor control and UI, all this is currently very very basic.
 * Concurrent access to website and stream doesn't seem to work well (or at all). Fix this.
