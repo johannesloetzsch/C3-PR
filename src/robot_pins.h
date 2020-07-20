@@ -7,9 +7,9 @@
 // GPIO 15 - DIR B
 
 #define MOTOR_L_PWM_PIN  12
-#define MOTOR_R_PWM_PIN  13
-#define MOTOR_L_DIR_PIN  14
-#define MOTOR_R_DIR_PIN  15
+#define MOTOR_R_PWM_PIN  2
+#define MOTOR_L_DIR_PIN  13
+#define MOTOR_R_DIR_PIN  14
 
 #define MOTOR_L_PWM_CHAN 3
 #define MOTOR_R_PWM_CHAN 4

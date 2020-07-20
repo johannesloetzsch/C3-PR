@@ -35,17 +35,18 @@
 
 #if __has_include("myconfig.h")
   // I keep my settings in a seperate header file
+  // pls copy the sample file and place it in src folder
   #include "myconfig.h"
 #else
-  const char* ssid = "my-access-point-ssid";
-  const char* password = "my-access-point-password";
+  const char* ssid = "C3D2";
+  const char* password =  "";
 #endif
 
 // A Name for the Camera. (can be set in myconfig.h)
 #ifdef CAM_NAME
   char myName[] = CAM_NAME;
 #else
-  char myName[] = "ESP32 camera server";
+  char myName[] = "C3PR-uninitialised";
 #endif
 
 // This will be displayed to identify the firmware
@@ -171,7 +172,7 @@ void setup() {
 
   // Feedback that hardware init is complete and we are now attempting to connect
   Serial.println("");
-  Serial.print("Connecting to Wifi Netowrk: ");
+  Serial.print("Connecting to Wifi network: ");
   Serial.println(ssid);
   flashLED(400);
   delay(100);
@@ -215,8 +216,9 @@ void flashLED(int flashtime)
 
 
 void loop() {
+  flashLED(200); //blink led as heartbeat
   // Just loop forever.
   // The stream and URI handler processes initiated by the startCameraServer() call at the
   // end of setup() will handle the camera and UI processing from now on.
-  delay(10000);
+  delay(5000);
 }

@@ -5,7 +5,7 @@ const uint8_t index_ov2640_html[] PROGMEM = R"=====(
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title id="title">ESP32 OV2640</title>
+        <title id="title">C3-PR</title>
         <style>
             body {
                 font-family: Arial,Helvetica,sans-serif;
