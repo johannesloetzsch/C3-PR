@@ -1,4 +1,5 @@
 #include "esp_camera.h"
+#include <esp_wifi.h>
 #include "robot_pins.h"
 #include <WiFi.h>
 
