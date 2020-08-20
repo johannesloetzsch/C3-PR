@@ -50,3 +50,10 @@ https://randomnerdtutorials.com/esp32-cam-troubleshooting-guide/
 * Over the air updates.
 * Improve motor control and UI, all this is currently very very basic.
 * Concurrent access to website and stream doesn't seem to work well (or at all). Fix this.
+
+
+## References
+How to use gamepads in browsers (no external libraries needed, BROWSER DEPENDENT!)
+https://gamedevelopment.tutsplus.com/de/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345
+Differential Steering with Gamepads
+https://www.impulseadventure.com/elec/robot-differential-steering.html
