@@ -3,6 +3,8 @@ A simple and affordable telepresence experimentation platform. Based on the [Esp
 
 ![Robots rising](docs/robotrising.png)
 
+![Construction Howto in German](https://codimd.c3d2.de/c3-pr-tutorial?view)
+
 
 #### AI-THINKER ESP32-CAM vs Other Modules:
 
