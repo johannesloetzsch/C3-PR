@@ -11,15 +11,12 @@ If a mapping for an incoming request is found in the mapping table, it is forwar
 
 1. Download the mitmproxy binary package.
 2. Start application with command line:
-   `./mitmproxy -p 9999 --mode reverse:https://christianix.de -s c3pr-selector.py --set block_global=false`
+   mitmproxy --mode reverse:http://ignored.example.com -s c3pr-selector.py --set block_global=false`
 3. Switch to event log for debugging:
    `Shift + 'e'` ('E')
 
 ## TODOS
 
-- Replace steaming Port on responses from robot:
-  `/~s/baseHost + ':81'/baseHost + ':80'`
-- Direct requests for URL ending on 'stream/' to port ':81' of robot
 - Send motor stop on time-out
 - Cancel reservation on errors
 

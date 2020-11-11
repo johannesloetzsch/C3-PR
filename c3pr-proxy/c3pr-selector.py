@@ -89,15 +89,20 @@ class C3PRController:
         tip = self.robots[robo][2]
         self.robots[robo] = (sip, h.hexdigest(), tip, datetime.now())
 
+    def __modify_request__(self, flow, robot):
+        port = 81 if flow.request.pretty_url.endswith("/stream") else 80
+        flow.request = http.HTTPRequest.make(
+            "GET",
+            "http://{}:{}{}".format(robot[2], port, flow.request.path))
+        ctx.log.info(flow.request.pretty_url)
+
     def request(self, flow):
         robo_name = self.__get_robo_name(flow)
         if robo_name:
             # found matching roboter assignment
             robot = self.robots[robo_name]
             flow.request.host = robot[2]
-            flow.request = http.HTTPRequest.make(
-                "GET",
-                "http://{}{}".format(robot[2], flow.request.path))
+            self.__modify_request__(flow, robot)
             return
 
         if flow.request.method == "POST":
@@ -112,9 +117,7 @@ class C3PRController:
                             self.__add_robo_control(name, flow)
                             robot = self.robots[name]
                             flow.request.host = robot[2]
-                            flow.request = http.HTTPRequest.make(
-                                "GET",
-                                "http://{}{}".format(robot[2], flow.request.path))
+                            self.__modify_request__(flow, robot)
                             return
 
         # nothing found, so showing landing page
@@ -122,6 +125,10 @@ class C3PRController:
             200,
             entry_site_hdr + self.__generate_entry_side_body(flow) + entry_site_footer,
             {"content-type":"text/html"})
+
+    def responseheaders(self, flow):
+        if flow.request.pretty_url.endswith("/stream"):
+            flow.response.stream = True
 
 addons = [
     C3PRController()
