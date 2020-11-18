@@ -39,8 +39,8 @@
   // pls copy the sample file and place it in src folder
   #include "myconfig.h"
 #else
-  const char* ssid = "C3D2";
-  const char* password =  "k-otk-ot";
+  const char* ssid = "ZW public";
+  const char* password =  "";
 #endif
 
 // A Name for the Camera. (can be set in myconfig.h)
