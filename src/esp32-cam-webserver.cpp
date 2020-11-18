@@ -40,7 +40,7 @@
   #include "myconfig.h"
 #else
   const char* ssid = "C3D2";
-  const char* password =  "";
+  const char* password =  "k-otk-ot";
 #endif
 
 // A Name for the Camera. (can be set in myconfig.h)
