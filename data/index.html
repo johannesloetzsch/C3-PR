@@ -654,10 +654,9 @@
 
         document.addEventListener('DOMContentLoaded', function (event) {
             var baseHost = document.location.origin
-            var streamUrl = baseHost + ':81'
-            // TODO: I'm quite positive that we should change that to 
-            // var streamUrl = document.location.protocol+'////'+document.location.hostname+':81'
-            // as .origin already can contain a port number
+            /* When connected directly (port 80), port 81 is used for streaming. However when using c3pr-proxy, the same port as for opening this page will be used. */
+            var streamPort = document.location.port === '' ? '81' : document.location.port
+            var streamUrl = document.location.protocol + '//' + document.location.hostname + ':' + streamPort
 
             var supportsGamePad = false;
             var repGP;
