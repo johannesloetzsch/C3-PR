@@ -5,6 +5,69 @@ from mitmproxy import ctx
 import hashlib
 from datetime import datetime, timedelta
 
+qr_site = """
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jsQR Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.min.js"></script>
+</head>
+<body>
+  <img id="video" SRC='/stream'>
+  <canvas id="canvas" hidden></canvas>
+  <div id="output" hidden>
+    <div id="outputMessage">No QR code detected.</div>
+    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+  </div>
+  <script>
+    var video = document.getElementById('video');
+    var canvasElement = document.getElementById("canvas");
+    var canvas = canvasElement.getContext("2d");
+    var outputContainer = document.getElementById("output");
+    var outputMessage = document.getElementById("outputMessage");
+    var outputData = document.getElementById("outputData");
+
+    function drawLine(begin, end, color) {
+      canvas.beginPath();
+      canvas.moveTo(begin.x, begin.y);
+      canvas.lineTo(end.x, end.y);
+      canvas.lineWidth = 4;
+      canvas.strokeStyle = color;
+      canvas.stroke();
+    }
+
+    function tick() {
+        canvasElement.hidden = false;
+        outputContainer.hidden = false;
+        canvasElement.height = video.height;
+        canvasElement.width = video.width;
+        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+
+        var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        var code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        });
+	console.log(code)
+        if (code) {
+          drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+          drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+          drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+          drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+          outputMessage.hidden = true;
+          outputData.parentElement.hidden = false;
+          outputData.innerText = code.data;
+        } else {
+          outputMessage.hidden = false;
+          outputData.parentElement.hidden = true;
+        }
+    }
+
+    setInterval(tick, 1000)
+  </script>
+</body>
+</html>
+"""
+
 entry_site_hdr = """
 <!DOCTYPE html>
 <html>
@@ -38,12 +101,13 @@ class C3PRController:
     def __init__(self):
         self.robots = {
             # name  : (SIP, Hash, TIP, Timestamp)
-            "ROBO0" : (None, None, "172.20.76.196", datetime.now()),
-            "MIRBO" : (None, None, "172.20.77.172", datetime.now()),
-            "LEON1" : (None, None, "172.20.78.212", datetime.now()),
-            "BIGALX" : (None, None, "172.20.79.62", datetime.now()),
-            "ROBO10" : (None, None, "172.20.79.71", datetime.now()),
-            "ROBO11" : (None, None, "172.20.79.166", datetime.now())
+            "Blue" : (None, None, "192.168.100.132", datetime.now()),
+            "White" : (None, None, "192.168.100.140", datetime.now()),
+            "Orange" : (None, None, "192.168.100.181", datetime.now()),
+            "Honky11" : (None, None, "192.168.100.162", datetime.now()),
+            "Honky0" : (None, None, "192.168.100.182", datetime.now()),
+            "Honky1" : (None, None, "192.168.100.179", datetime.now()),
+            "Test" : (None, None, "172.20.77.177", datetime.now())
         }
 
     def __generate_entry_side_body(self, flow):
@@ -97,6 +161,14 @@ class C3PRController:
         ctx.log.info(flow.request.pretty_url)
 
     def request(self, flow):
+        if flow.request.pretty_url.endswith("/qr.html"):
+            flow.response = http.HTTPResponse.make(
+                200,
+                qr_site,
+                {"content-type":"text/html"})
+            return
+
+
         robo_name = self.__get_robo_name(flow)
         if robo_name:
             # found matching roboter assignment

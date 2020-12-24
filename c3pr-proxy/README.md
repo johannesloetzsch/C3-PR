@@ -11,7 +11,7 @@ If a mapping for an incoming request is found in the mapping table, it is forwar
 
 1. Download the mitmproxy binary package.
 2. Start application with command line:
-   mitmproxy --mode reverse:http://ignored.example.com -s c3pr-selector.py --set block_global=false`
+   mitmproxy --mode reverse:http://ignored.example.com -s c3pr-selector.py --set block_global=false
 3. Switch to event log for debugging:
    `Shift + 'e'` ('E')
 
