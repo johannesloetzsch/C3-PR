@@ -39,12 +39,13 @@ class C3PRController:
         self.robots = {
             # name  : (SIP, Hash, TIP, Timestamp)
             "Blue" : (None, None, "192.168.100.132", datetime.now()),
-            "White" : (None, None, "192.168.100.140", datetime.now()),
+            "Green" : (None, None, "192.168.100.184", datetime.now()),
             "Orange" : (None, None, "192.168.100.181", datetime.now()),
-            "Honky11" : (None, None, "192.168.100.162", datetime.now()),
+            "Yellow" : (None, None, "192.168.100.180", datetime.now()),
+            "White" : (None, None, "192.168.100.140", datetime.now()),
             "Honky0" : (None, None, "192.168.100.182", datetime.now()),
             "Honky1" : (None, None, "192.168.100.179", datetime.now()),
-            "Test" : (None, None, "172.20.77.177", datetime.now())
+            "Honky11" : (None, None, "192.168.100.162", datetime.now())
         }
 
     def __generate_entry_side_body(self, flow):

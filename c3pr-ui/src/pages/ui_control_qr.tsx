@@ -29,7 +29,7 @@ setInterval(tick, qr_interval)
 export default () => (
   <div>
     <iframe id="iframe" src={iframe_origin} />
-    <img id="stream" src={url_stream} />
+    <img id="stream" src={url_stream} style={{transform: "rotate(90deg)"}} />
     <canvas id="canvas" />
     <Control />
   </div>
