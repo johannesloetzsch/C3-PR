@@ -6,33 +6,6 @@ import hashlib
 from datetime import datetime, timedelta
 import json
 
-entry_site_hdr = """
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C3PR Proxy</title>
-</head>
-
-<body>
-    <main>
-"""
-
-entry_site_footer = """
-    </main>
-    <footer>
-        <p>
-        C3PR presented by <a href="https://www.c3d2.de">C3D2</a>
-        </p>
-    </footer>
-
-</body>
-
-</html>
-"""
-
 timeout = timedelta(minutes=1)
 
 class C3PRController:
@@ -54,26 +27,25 @@ class C3PRController:
         robots = [{"name": n, "user": c[1]} for [n, c] in self.robots.items()]
         return json.dumps(robots)
 
-    def __generate_entry_side_body(self, flow):
-        bdy = "<table>\n"
-        bdy += "<tr>\n"
-        bdy += "<th>Name</th><th>User IP</th><th>User Agent Hash</th>\n"
-        bdy += "<tr>\n"
-        for n, c in self.robots.items():
-            bdy += "<tr>\n"
-            bdy += "<td>{}</td><td>{}</td><td>{}</td>\n".format(n, c[0], c[1])
-            bdy += "<td>\n"
-            if c[0]:
-                bdy += "Occupied"
-            else:
-                bdy += '<form action="" method="post">'
-                bdy += '<input type="submit" name="robot" value="{}" />'.format(n)
-                bdy += '</form>\n'
-            bdy += "</td>\n"
-            bdy += "</tr>\n"
-        bdy += "</table>\n"
-        return bdy
-    
+    def __allocate(self, robo, flow):
+        h = hashlib.sha1()
+        ua = flow.request.headers["User-Agent"]
+        h.update(ua.encode('utf-8') if ua else "")
+        sip = flow.client_conn.address[0]
+        tip = self.robots[robo][2]
+        self.robots[robo] = (sip, h.hexdigest(), tip, datetime.now())
+
+    def __free(self, flow):
+        h = hashlib.sha1()
+        ua = flow.request.headers["User-Agent"]
+        h.update(ua.encode('utf-8') if ua else "")
+        sip = flow.client_conn.address[0]
+        for name, con in self.robots.items():
+            tip = self.robots[name][2]
+            if con[0] == sip and con[1] == h.hexdigest():
+                self.robots[name] = (None, None, tip, datetime.now())
+        return json.dumps({"logout": "ok"})
+
     def __get_robo_name(self, flow):
         h = hashlib.sha1()
         ua = flow.request.headers["User-Agent"]
@@ -87,15 +59,6 @@ class C3PRController:
                 return name
             if (con[3] + timeout) < datetime.now():
                 self.robots[name] = (None, None, tip, datetime.now())
-        return None
-
-    def __add_robo_control(self, robo, flow):
-        h = hashlib.sha1()
-        ua = flow.request.headers["User-Agent"]
-        h.update(ua.encode('utf-8') if ua else "")
-        sip = flow.client_conn.address[0]
-        tip = self.robots[robo][2]
-        self.robots[robo] = (sip, h.hexdigest(), tip, datetime.now())
 
     def __modify_request__(self, flow, robot):
         port = 81 if flow.request.pretty_url.endswith("/stream") else 80
@@ -113,14 +76,6 @@ class C3PRController:
             self.__modify_request__(flow, robot)
             return
 
-        # proxy landing page
-        if flow.request.path == "/available.json":
-            flow.response = http.HTTPResponse.make(
-                200,
-                self.__generate_json(flow),
-                {"content-type":"text/json"})
-            return
-
         if flow.request.method == "POST":
             # processing request for roboter assignment
             if flow.request.content:
@@ -131,18 +86,24 @@ class C3PRController:
                 if len(v) == 2:
                     for name in self.robots.keys():
                         if name == v[1]:
-                            self.__add_robo_control(name, flow)
+                            self.__allocate(name, flow)
                             robot = self.robots[name]
                             flow.request.host = robot[2]
                             self.__modify_request__(flow, robot)
                             return
 
-        # proxy landing page
-        if flow.request.path == "/landing":
+        if flow.request.path == "/available.json":
             flow.response = http.HTTPResponse.make(
                 200,
-                entry_site_hdr + self.__generate_entry_side_body(flow) + entry_site_footer,
-                {"content-type":"text/html"})
+                self.__generate_json(flow),
+                {"content-type":"text/json"})
+            return
+
+        if flow.request.path == "/free":
+            flow.response = http.HTTPResponse.make(
+                200,
+                self.__free(flow),
+                {"content-type":"text/json"})
             return
 
         # static ui

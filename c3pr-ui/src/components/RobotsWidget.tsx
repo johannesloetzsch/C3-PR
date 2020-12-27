@@ -11,8 +11,10 @@ export default function RobotsWidget({onSelection}:any) {
   const [isLoading, setIsLoading] = useState(true)
   //const [isLoadingAvailable, setIsLoadingAvailable] = useState(true)
 
+  axios.get("/free")
+
   if(!robots && !error) {
-  axios.get("robots.json")
+  axios.get("/robots.json")
     .then(
       r => {
         setIsLoading(false)
