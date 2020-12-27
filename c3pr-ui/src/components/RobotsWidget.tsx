@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Robot } from '../types/Robot'
 import { RobotWidget } from './RobotWidget'
 
-export default function RobotsWidget() {
+export default function RobotsWidget({onSelection}:any) {
   const [robots, setRobots] = useState<Robot[]>()
   const [error, setError] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -28,7 +28,7 @@ export default function RobotsWidget() {
       { error && <p>An error occurred</p> }
       { !error && robots &&
         <div>
-	  { robots.map(robot => <RobotWidget key={robot.name} {...robot} />) }
+	  { robots.map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} />) }
 	</div>
       }
     </>

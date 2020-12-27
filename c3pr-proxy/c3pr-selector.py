@@ -132,12 +132,11 @@ class C3PRController:
             return
 
         # static ui
-        if True:  ## TODO # flow.request.path.startswith("/ui"):
-            flow.request = http.HTTPRequest.make("GET",
-                "http://{}:{}{}"
-                .format("localhost", 3000, flow.request.path))
-            ctx.log.info(flow.request.path)
-            return
+        flow.request = http.HTTPRequest.make("GET",
+            "http://{}:{}{}"
+            .format("localhost", 3000, flow.request.path))
+        ctx.log.info(flow.request.path)
+        return
 
     def responseheaders(self, flow):
         if flow.request.pretty_url.endswith("/stream"):

@@ -7,4 +7,4 @@ export const qr_args:Options={inversionAttempts: "dontInvert"}
 
 export const iframe_origin:string="https://matter.crockefeller.org/wille-berg"
 
-export const debug:Boolean=true
+export const debug:Boolean=false

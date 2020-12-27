@@ -1,6 +1,6 @@
 import React from 'react'
-import RobotsWidget from 'components/RobotsWidget'
+import Auto from 'components/Auto'
 
 export default () => (
-  <RobotsWidget />
+  <Auto />
 )
