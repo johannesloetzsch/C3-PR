@@ -19,7 +19,7 @@ function tick() {
   const code = jsQR(imageData.data, imageData.width, imageData.height, qr_args)
 
   if(code) {
-    console.log(code.data)
+    console.log('QRcode:' ,code.data)
     if(code.data.startsWith("http")) {
       const iframe = document.getElementById("iframe") as HTMLIFrameElement
       iframe.src = code.data
@@ -35,7 +35,7 @@ interface ExploreProps {
 
 export default ({allocatedRobot}:ExploreProps) => (
   <div>
-    {allocatedRobot && console.log('connected to ' + allocatedRobot)}
+    {allocatedRobot && console.log('connected to:', allocatedRobot.name, allocatedRobot)}
     <iframe id="iframe" src={iframe_origin} />
     <img id="stream" src={url_stream} style={{transform: 'rotate(' + allocatedRobot.rotate + 'deg)'}} />
     <canvas id="canvas" />

@@ -4,6 +4,7 @@ from mitmproxy import http
 from mitmproxy import ctx
 import hashlib
 from datetime import datetime, timedelta
+import json
 
 entry_site_hdr = """
 <!DOCTYPE html>
@@ -45,8 +46,13 @@ class C3PRController:
             "White" : (None, None, "192.168.100.140", datetime.now()),
             "Honky0" : (None, None, "192.168.100.182", datetime.now()),
             "Honky1" : (None, None, "192.168.100.179", datetime.now()),
-            "Honky11" : (None, None, "192.168.100.162", datetime.now())
+            "Honky11" : (None, None, "192.168.100.162", datetime.now()),
+            "LiveStream" : (None, None, "192.168.100.226", datetime.now())
         }
+
+    def __generate_json(self, flow):
+        robots = [{"name": n, "user": c[1]} for [n, c] in self.robots.items()]
+        return json.dumps(robots)
 
     def __generate_entry_side_body(self, flow):
         bdy = "<table>\n"
@@ -105,6 +111,14 @@ class C3PRController:
             robot = self.robots[robo_name]
             flow.request.host = robot[2]
             self.__modify_request__(flow, robot)
+            return
+
+        # proxy landing page
+        if flow.request.path == "/available.json":
+            flow.response = http.HTTPResponse.make(
+                200,
+                self.__generate_json(flow),
+                {"content-type":"text/json"})
             return
 
         if flow.request.method == "POST":
