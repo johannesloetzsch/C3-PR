@@ -42,10 +42,10 @@ nav a {
   bottom: 20px;
   right: 10px;
   left: auto;
-  min-width: 5%;
-  min-height: 5%;
-  max-width: 10%;
-  max-height: 10%;
+  min-width: 15%;
+  min-height: 15%;
+  max-width: 30%;
+  max-height: 30%;
 }
 
 #wasdx {

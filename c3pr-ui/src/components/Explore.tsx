@@ -7,7 +7,6 @@ import Control from './controls'
 function evaluateQR() {
   const stream = document.getElementById('stream') as HTMLImageElement
   const canvas = document.getElementById('canvas') as HTMLCanvasElement
-  if(!canvas) return
   const context = canvas.getContext('2d')
 
   canvas.hidden = !debug
@@ -26,6 +25,17 @@ function evaluateQR() {
   }
 }
 
+function reloadStream() {
+  const stream = document.getElementById('stream') as HTMLImageElement
+  const waitingTimePerAttempt_ms = 5*1000
+  const pseudoRandom = Math.floor( (new Date().getTime()) / waitingTimePerAttempt_ms )
+  const newUrl = url_stream + "?" + pseudoRandom + "/stream"
+  if(!stream.src.endsWith(newUrl)) {
+    console.log("reconnect Stream")
+    stream.src = newUrl
+  }
+}
+
 interface ExploreProps {
   allocatedRobot: Robot
 }
@@ -36,7 +46,10 @@ export default ({allocatedRobot}:ExploreProps) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const qr = evaluateQR()
+      let qr = null
+      try { qr = evaluateQR() }
+      catch (e) { reloadStream() }
+
       if(qr && qr != backgroundUrl) {
         setBackgroundUrl(qr)
 	setMinimizedStream(true)
