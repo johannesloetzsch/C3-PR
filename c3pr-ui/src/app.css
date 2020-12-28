@@ -33,9 +33,19 @@ nav a {
 #stream {
   position: fixed;
   bottom: 5%;
-  left:25%;
+  left: 25%;
   min-width: 50%;
   min-height: 50%;
+}
+
+#stream.minimized {
+  bottom: 20px;
+  right: 10px;
+  left: auto;
+  min-width: 5%;
+  min-height: 5%;
+  max-width: 10%;
+  max-height: 10%;
 }
 
 #wasdx {
