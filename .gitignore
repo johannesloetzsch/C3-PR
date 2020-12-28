@@ -5,3 +5,4 @@
 .vscode/ipch
 src/myconfig.sample.h
 src/myconfig.h
+dyndns.url
