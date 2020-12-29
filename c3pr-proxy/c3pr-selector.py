@@ -10,18 +10,10 @@ timeout = timedelta(minutes=1)
 
 class C3PRController:
     def __init__(self):
-        self.robots = {
-            # name  : (SIP, Hash, TIP, Timestamp)
-            "Blue" : (None, None, "192.168.100.132", datetime.now()),
-            "Green" : (None, None, "192.168.100.184", datetime.now()),
-            "Orange" : (None, None, "192.168.100.181", datetime.now()),
-            "Yellow" : (None, None, "192.168.100.180", datetime.now()),
-            "White" : (None, None, "192.168.100.140", datetime.now()),
-            "Honky0" : (None, None, "192.168.100.182", datetime.now()),
-            "Honky1" : (None, None, "192.168.100.179", datetime.now()),
-            "Honky11" : (None, None, "192.168.100.162", datetime.now()),
-            "LiveStream" : (None, None, "192.168.100.226", datetime.now())
-        }
+        # name  : (SIP, Hash, TIP, Timestamp)
+        self.robots = {}
+        for r in json.load(open("../c3pr-ui/public/robots.json")):
+            self.robots[r["name"]] = (None, None, r["ip"], datetime.now())
 
     def __generate_json(self, flow):
         robots = [{"name": n, "user": c[1]} for [n, c] in self.robots.items()]

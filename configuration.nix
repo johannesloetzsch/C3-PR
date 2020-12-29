@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  pingbot = pkgs.python3.withPackages(ps : with ps; [ requests ]);
+in
 {
   system.stateVersion = "20.09";
 
@@ -58,11 +61,11 @@
 
     services.mitmproxy = {
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "oneshot";
+      serviceConfig.Type = "simple";
       serviceConfig = {
        StandardInput = "tty";
        StandardOutput = "tty";
-       TTYPath = "/dev/tty11";
+       TTYPath = "/dev/tty10";
       };
       script = ''
         cd /etc/nixos/c3pr-proxy/
@@ -72,11 +75,11 @@
 
     services.c3pr-ui = {
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Type = "oneshot";
+      serviceConfig.Type = "simple";
       serviceConfig = {
        StandardInput = "tty";
        StandardOutput = "tty";
-       TTYPath = "/dev/tty12";
+       TTYPath = "/dev/tty11";
       };
       script = ''
         cd /etc/nixos/c3pr-ui/
@@ -85,6 +88,21 @@
         /run/wrappers/bin/sudo -u roboter ${pkgs.nodejs}/bin/npm i
         /run/wrappers/bin/sudo -u roboter ${pkgs.nodejs}/bin/npm run build
         /run/wrappers/bin/sudo -u roboter ${pkgs.nodejs}/bin/npm run serve
+      '';
+    };
+
+    services.pingbot = {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "simple";
+      serviceConfig = {
+       StandardInput = "tty";
+       StandardOutput = "tty";
+       TTYPath = "/dev/tty12";
+      };
+      script = ''
+        cd /etc/nixos/c3pr-proxy/
+        PATH="$PATH:/run/wrappers/bin/"  ## path where to find ping
+        /run/wrappers/bin/sudo -u roboter ${pingbot}/bin/python3 ping_bot.py 
       '';
     };
   };

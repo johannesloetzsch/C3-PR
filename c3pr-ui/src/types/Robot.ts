@@ -1,5 +1,6 @@
 export interface Robot {
   name: string,
   img: string,
-  rotate: number
+  rotate: number,
+  ip: string
 }
