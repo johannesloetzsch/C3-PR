@@ -30,7 +30,7 @@ nav a {
   height: 100%;
 }
 
-#stream {
+.stream {
   position: fixed;
   bottom: 5%;
   left: 25%;
@@ -38,7 +38,7 @@ nav a {
   min-height: 50%;
 }
 
-#stream.minimized {
+.stream.minimized {
   bottom: 20px;
   right: 10px;
   left: auto;
@@ -46,6 +46,18 @@ nav a {
   min-height: 15%;
   max-width: 30%;
   max-height: 30%;
+}
+
+#stream-close-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#stream-resize-icon {
+  position: absolute;
+  top: 5px;
+  right: 40px;
 }
 
 #wasdx {
