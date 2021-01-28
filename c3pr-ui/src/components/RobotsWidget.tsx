@@ -56,7 +56,7 @@ export default function RobotsWidget({onSelection}:any) {
       { isLoading && <p>Loading data...</p> }
       { error && <p>An error occurred</p> }
       { !error && robots && robotsAvailable &&
-        <div>
+        <div style={{maxWidth: "1000px"}}>
 	  { robots.filter(r => isAvailable(r))
 	    .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} />)
 	  }
