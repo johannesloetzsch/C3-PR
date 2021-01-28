@@ -60,6 +60,9 @@ export default function RobotsWidget({onSelection}:any) {
 	  { robots.filter(r => isAvailable(r))
 	    .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} />)
 	  }
+	  { robots.filter(r => !isAvailable(r))
+	    .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} disabled={true} />)
+	  }
 	</div>
       }
     </>
