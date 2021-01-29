@@ -1,4 +1,6 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAdjust, faArrowUp, faArrowLeft, faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import {url_control} from '../../conf'
 import axios from 'axios'
 
@@ -51,8 +53,23 @@ document.addEventListener('keyup', (e) => handler('up', e))
 
 export default () => {
   return (
-    <div>
-      <img id='wasdx' src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Icon_WASD.svg/200px-Icon_WASD.svg.png' />
+    <div id='controls'>
+      <table>
+        <tr>
+	  <td></td>
+          <td><FontAwesomeIcon icon={faArrowUp} size="3x" inverse border pull="left" onClick={null} /></td>
+	  <td></td>
+	  <td></td>
+	  <td></td>
+        </tr>
+        <tr>
+          <td><FontAwesomeIcon icon={faArrowLeft} size="3x" inverse border pull="left" onClick={null} /></td>
+          <td><FontAwesomeIcon icon={faArrowDown} size="3x" inverse border pull="left" onClick={null} /></td>
+          <td><FontAwesomeIcon icon={faArrowRight} size="3x" inverse border pull="left" onClick={null} /></td>
+	  <td></td>
+          <td><FontAwesomeIcon icon={faAdjust} size="3x" inverse onClick={() => console.log("light")} /></td>
+        </tr>
+      </table>
     </div>
   )
 }

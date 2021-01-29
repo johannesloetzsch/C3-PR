@@ -60,9 +60,15 @@ nav a {
   right: 40px;
 }
 
-#wasdx {
+#controls {
   position: fixed;
-  bottom: -20px;
-  right: 50%;
-  z-index: 1000;
+  bottom: 0px;
+  width: 100%;
+  text-align: -webkit-center;
+}
+
+#controls td {
+  height: 110px;
+  width: 110px;
+  /*z-index: 1000;*/
 }

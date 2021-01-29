@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import jsQR from 'jsqr'
-import FontAwesome from 'react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowMinimize, faWindowMaximize, faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import {url_stream, qr_interval, qr_args, iframe_origin, debug} from '../conf'
 import { Robot } from '../types/Robot'
 import Control from './controls'
@@ -64,16 +65,13 @@ export default ({allocatedRobot}:ExploreProps) => {
     <div>
       {allocatedRobot && console.log('connected to:', allocatedRobot.name, allocatedRobot)}
       <iframe id='iframe' src={backgroundUrl} style={{zIndex: -100}} />
+      <canvas id='canvas' /*style={{zIndex: 100}}*/ />
+      <Control />
       <div className={'stream ' + (minimizedStream ? "minimized" : "")} onClick={() => setMinimizedStream(!minimizedStream)}>
         <img id='stream' src={url_stream} style={{transform: 'rotate(' + allocatedRobot.rotate + 'deg)'}} />
-	<span id="stream-resize-icon" className="fa-stack">
-          <FontAwesome name="square" stack="2x" />
-          <FontAwesome name={minimizedStream ? "window-maximize" : "window-minimize"} inverse stack="1x" />
-	</span>
-        <FontAwesome id="stream-close-icon" name="window-close" size="2x" onClick={() => document.location.assign("/")} />
+        <FontAwesomeIcon id="stream-resize-icon" icon={minimizedStream ? faWindowMaximize : faWindowMinimize} inverse border size="1x" />
+        <FontAwesomeIcon id="stream-close-icon" icon={faWindowClose} inverse size="2x" onClick={() => document.location.assign("/")} />
       </div>
-      <canvas id='canvas' style={{zIndex: 100}} />
-      <Control />
 
     </div>
   )
