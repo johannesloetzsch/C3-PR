@@ -51,21 +51,28 @@ function handler(direction:string, e:any) {
 document.addEventListener('keydown', (e) => handler('down', e))
 document.addEventListener('keyup', (e) => handler('up', e))
 
+function ArrowButton({key, icon}:any) {
+  return (
+    <FontAwesomeIcon icon={icon} size="3x" inverse border pull="left" onMouseDown={()=>handler('down', {key})} onMouseUp={()=>handler('up', {key})} />
+  )
+}
+
+
 export default () => {
   return (
     <div id='controls'>
       <table>
         <tr>
 	  <td></td>
-          <td><FontAwesomeIcon icon={faArrowUp} size="3x" inverse border pull="left" onClick={null} /></td>
+          <td><ArrowButton key={'ArrowUp'} icon={faArrowUp} /></td>
 	  <td></td>
 	  <td></td>
 	  <td></td>
         </tr>
         <tr>
-          <td><FontAwesomeIcon icon={faArrowLeft} size="3x" inverse border pull="left" onClick={null} /></td>
-          <td><FontAwesomeIcon icon={faArrowDown} size="3x" inverse border pull="left" onClick={null} /></td>
-          <td><FontAwesomeIcon icon={faArrowRight} size="3x" inverse border pull="left" onClick={null} /></td>
+          <td><ArrowButton key={'ArrowLeft'} icon={faArrowLeft} /></td>
+          <td><ArrowButton key={'ArrowDown'} icon={faArrowDown} /></td>
+          <td><ArrowButton key={'ArrowRight'} icon={faArrowRight} /></td>
 	  <td></td>
           <td><FontAwesomeIcon icon={faAdjust} size="3x" inverse onClick={() => console.log("light")} /></td>
         </tr>
