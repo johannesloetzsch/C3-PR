@@ -1,12 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAdjust, faArrowUp, faArrowLeft, faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import {url_control} from '../../conf'
 import axios from 'axios'
-
-// light on
-setInterval(() => axios.get(url_control + '?var=lamp&val=100'), 10000,)
-
 
 let lastDirection:string = null
 let lastKey:string = null
@@ -59,6 +55,13 @@ function ArrowButton({key, icon}:any) {
 
 
 export default () => {
+  const [lampOn, setLampOn] = useState<boolean>(false)
+
+  function lampToggle() {
+    setLampOn(!lampOn)
+    axios.get(url_control + '?var=lamp&val=' + (lampOn ? '100' : '0'))
+  }
+
   return (
     <div id='controls'>
       <table>
@@ -74,7 +77,7 @@ export default () => {
           <td><ArrowButton key={'ArrowDown'} icon={faArrowDown} /></td>
           <td><ArrowButton key={'ArrowRight'} icon={faArrowRight} /></td>
 	  <td></td>
-          <td><FontAwesomeIcon icon={faAdjust} size="3x" inverse onClick={() => console.log("light")} /></td>
+          <td><FontAwesomeIcon icon={faAdjust} size="3x" inverse onClick={lampToggle} /></td>
         </tr>
       </table>
     </div>

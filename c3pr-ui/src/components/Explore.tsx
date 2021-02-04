@@ -33,7 +33,7 @@ function reloadStream() {
   const pseudoRandom = Math.floor( (new Date().getTime()) / waitingTimePerAttempt_ms )
   const newUrl = url_stream + "?" + pseudoRandom + "/stream"
   if(!stream.src.endsWith(newUrl)) {
-    console.log("reconnect Stream")
+    //console.log("reconnect Stream")
     stream.src = newUrl
   }
 }
