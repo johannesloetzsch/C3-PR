@@ -42,6 +42,11 @@ interface ExploreProps {
   allocatedRobot: Robot
 }
 
+const rotate:any = {0: {'top': 'top', 'right': 'right'},
+                    90: {'top': 'left', 'right': 'top'},
+                    180: {'top': 'bottom', 'right': 'left'},
+                    270: {'top': 'right', 'right': 'bottom'}}
+
 export default ({allocatedRobot}:ExploreProps) => {
   const [backgroundUrl, setBackgroundUrl] = useState<string>(iframe_origin)
   const [minimizedStream, setMinimizedStream] = useState<boolean>(false)
@@ -65,14 +70,19 @@ export default ({allocatedRobot}:ExploreProps) => {
     <div>
       {allocatedRobot && console.log('connected to:', allocatedRobot.name, allocatedRobot)}
       <iframe id='iframe' src={backgroundUrl} style={{zIndex: -100}} />
-      <canvas id='canvas' /*style={{zIndex: 100}}*/ />
-      <Control />
-      <div className={'stream ' + (minimizedStream ? "minimized" : "")} onClick={() => setMinimizedStream(!minimizedStream)}>
-        <img id='stream' src={url_stream} style={{transform: 'rotate(' + allocatedRobot.rotate + 'deg)'}} />
-        <FontAwesomeIcon id="stream-resize-icon" icon={minimizedStream ? faWindowMaximize : faWindowMinimize} inverse border size="1x" />
-        <FontAwesomeIcon id="stream-close-icon" icon={faWindowClose} inverse size="2x" onClick={() => document.location.assign("/")} />
+      <canvas id='canvas' />
+      {/** css transform of inline elements doesn't change the bouing box of the parent :/
+           To position other elements according to the boundig box, we transform the parent element and transform the other children back. **/}
+      <div className={'stream ' + (minimizedStream ? "minimized" : "")} onClick={() => setMinimizedStream(!minimizedStream)} style={{transform: 'rotate(' + allocatedRobot.rotate + 'deg)'}} >
+        <img id='stream' src={url_stream} />
+        <FontAwesomeIcon id="stream-resize-icon" icon={minimizedStream ? faWindowMaximize : faWindowMinimize} inverse size="2x"
+	                 style={{transform: 'rotate(' + -allocatedRobot.rotate + 'deg)', position: "absolute",
+                                 [rotate[allocatedRobot.rotate]['top']]: "5px", [rotate[allocatedRobot.rotate]['right']]: "40px"}} />
+        <FontAwesomeIcon id="stream-close-icon" icon={faWindowClose} inverse size="2x" onClick={() => document.location.assign("/")}
+	                 style={{transform: 'rotate(' + -allocatedRobot.rotate + 'deg)', position: "absolute",
+                                 [rotate[allocatedRobot.rotate]['top']]: "5px", [rotate[allocatedRobot.rotate]['right']]: "5px"}} />
       </div>
-
+      <Control />
     </div>
   )
 }
