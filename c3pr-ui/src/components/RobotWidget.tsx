@@ -9,7 +9,7 @@ function allocate(robot:Robot, onSelection:any) {
 
 const status: any = {'offline': {'color': 'red',
                                  'msg': 'Offline',
-                                 'transform': 'translate(40px, 40px) rotate(-35deg)'},
+                                 'transform': 'translate(0px, 40px) rotate(-35deg)'},
                      'used': {'color': 'yellow',
 		              'msg': 'In Benutzung',
 			      'transform': 'translate(-20px, 100px) rotate(-35deg)'}}

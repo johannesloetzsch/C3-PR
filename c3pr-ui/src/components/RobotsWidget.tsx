@@ -63,21 +63,30 @@ export default function RobotsWidget({onSelection}:any) {
   }
 
   return (
-    <>
+    <div style={{textAlign: 'center'}}>
       { isLoading && <p>Loading data...</p> }
       { error && <p>An error occurred</p> }
       { !error && robots && robotsAvailable &&
         <>
+	  <div>
+            { robots.filter(r => availability(r) !== 'offline').length === 0
+	      ? <div className="offlineMsg">
+		  <p>Derzeit sind leider keine Roboter online, bitte versuche es später erneut.</p>
+		  <p>Im Februar 2021 können die Roboter in den Technischen Sammlungen jeden Freitag zwischen 16h und 20h benutzt werden.</p>
+		</div>
+	      : ''
+	    }
+	  </div>
           <div style={{maxWidth: "1000px", display: "inline-block"}}>
             { robots.filter(r => availability(r) === 'free')
               .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} />)
             }
-          </div>
+          </div><br/>
           <div style={{maxWidth: "1000px", display: "inline-block"}}>
             { robots.filter(r => availability(r) === 'used')
               .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} disabled={'used'} />)
             }
-          </div>
+          </div><br/>
           <div style={{maxWidth: "1000px", display: "inline-block"}}>
             { robots.filter(r => availability(r) === 'offline')
               .map(robot => <RobotWidget key={robot.name} onSelection={onSelection} robot={robot} disabled={'offline'} />)
@@ -85,6 +94,6 @@ export default function RobotsWidget({onSelection}:any) {
           </div>
         </>
       }
-    </>
+    </div>
   )
 }

@@ -3,6 +3,14 @@ body {
   padding: 0;
 }
 
+.offlineMsg {
+  display: inline-block;
+  background: yellow;
+  border: 3px solid red;
+  padding: 10px;
+  margin: 20px;
+}
+
 a {
   text-decoration: none;
   color: #108db8;
