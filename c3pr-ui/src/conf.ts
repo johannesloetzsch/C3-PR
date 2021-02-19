@@ -6,7 +6,7 @@ export const pingbot_hashed_useragent = "5ed6f5c30b85e76f361baef42ae484005953538
 
 export const initialSpeedFallback = 0.4
 export const acceleration = 0.05
-export const steerInterval = 500  // ms
+export const steerInterval = 1000  // ms
 
 export const autoLogoutTime_ms = 60*1000
 

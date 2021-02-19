@@ -3,7 +3,8 @@
   "img": "/robots/glow.jpg",
   "rotate": 90,
   "ip": "192.168.100.46",
-  "initialSpeed": 0.3},
+  "initialSpeed": 0.35,
+  "biasLeft": 0.98},
  {"name": "White",
   "img": "/robots/white.jpg",
   "rotate": 90,
@@ -18,7 +19,7 @@
   "img": "/robots/green.jpg",
   "rotate": 90,
   "ip": "192.168.100.200",
-  "initialSpeed": 0.3},
+  "initialSpeed": 0.35},
  {"name": "Bunt",
   "img": "/robots/bunt.jpg",
   "rotate": 90,
@@ -33,10 +34,12 @@
   "img": "/robots/blue.jpg",
   "rotate": 90,
   "ip": "192.168.100.132",
-  "initialSpeed": 0.3},
+  "initialSpeed": 0.4,
+  "biasLeft": 1.03},
  {"name": "Honky11",
   "img": "/robots/honky11.jpg",
   "rotate": 0,
   "ip": "192.168.100.162",
-  "initialSpeed": 0.3}
+  "initialSpeed": 0.3,
+  "biasLeft": 0.97}
 ]

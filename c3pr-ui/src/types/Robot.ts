@@ -3,5 +3,6 @@ export interface Robot {
   img: string,
   rotate: number,
   ip: string,
-  initialSpeed?: number
+  initialSpeed?: number,
+  biasLeft?: number
 }

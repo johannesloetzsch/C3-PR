@@ -19,10 +19,12 @@ let mleft = 0
 let mright = 0
 let speed:number = null
 let allocatedRobotInitialSpeed:number = null
+let allocatedRobotBiasLeft:number = null
 
 function steer() {
-  let mleftAccelerated = speed * mleft
-  let mrightAccelerated = speed * mright
+  let maxSpeed = Math.min( allocatedRobotBiasLeft, 1/allocatedRobotBiasLeft )
+  let mleftAccelerated = Math.min(maxSpeed, speed) * mleft / allocatedRobotBiasLeft
+  let mrightAccelerated = Math.min(maxSpeed, speed) * mright * allocatedRobotBiasLeft
 
   console.log(mleftAccelerated, mrightAccelerated)
   axios.get(url_control + '?var=motor_both&val=' + mleftAccelerated + '&val2=' + mrightAccelerated)
@@ -65,7 +67,7 @@ function handler(direction:string, e:any) {
       }
     }
 
-    //steer()
+    steer()
 
   }
   lastDirection = direction
@@ -85,6 +87,8 @@ const key = Key
 
 export default ({allocatedRobot}:any) => {
   allocatedRobotInitialSpeed = allocatedRobot?.initialSpeed
+  allocatedRobotBiasLeft = allocatedRobot?.biasLeft || 1
+
   const [lampOn, setLampOn] = useState<boolean>(false)
 
   function lampToggle() {
