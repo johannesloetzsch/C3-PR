@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAdjust, faArrowUp, faArrowLeft, faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import {url_control, autoLogoutTime_ms} from '../../conf'
+import {url_control, autoLogoutTime_ms, initialSpeed, acceleration} from '../../conf'
 import axios from 'axios'
 
 let logoutTimeout: ReturnType<typeof setTimeout>
@@ -15,6 +15,21 @@ resetLogoutTimeout()
 
 let lastDirection:string = null
 let lastKey:string = null
+let mleft = 0
+let mright = 0
+let speed:number = null
+
+function steer() {
+  let mleftAccelerated = speed * mleft
+  let mrightAccelerated = speed * mright
+
+  console.log(mleftAccelerated, mrightAccelerated)
+  axios.get(url_control + '?var=motor_both&val=' + mleftAccelerated + '&val2=' + mrightAccelerated)
+       .then(() => { if(mleft!=0 || mright!=0) speed += acceleration })
+       .catch(() => speed = 0)
+}
+
+setInterval(() => steer(), 500)
 
 function handler(direction:string, e:any) {
   resetLogoutTimeout()
@@ -22,11 +37,11 @@ function handler(direction:string, e:any) {
   if(lastDirection != direction || lastKey != e.key) {
     console.log(direction, e.key)
 
-    if(direction === 'up') {
-      axios.get(url_control + '?var=motor_both&val=0&val2=0')
-    } else {
-      let mleft = 0;
-      let mright = 0;
+    mleft = 0
+    mright = 0
+    speed = initialSpeed
+
+    if(direction !== 'up') {
       if (e.key === 'w' || e.key === 'ArrowUp') {
         mleft = 1;
         mright = 1;
@@ -47,8 +62,9 @@ function handler(direction:string, e:any) {
         mleft = -1;
         mright = -1;
       }
-      axios.get(url_control + '?var=motor_both&val=' + mleft + '&val2=' + mright)
     }
+
+    //steer()
 
   }
   lastDirection = direction
