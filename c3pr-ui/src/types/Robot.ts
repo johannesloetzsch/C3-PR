@@ -2,5 +2,6 @@ export interface Robot {
   name: string,
   img: string,
   rotate: number,
-  ip: string
+  ip: string,
+  initialSpeed?: number
 }

@@ -82,7 +82,7 @@ export default ({allocatedRobot}:ExploreProps) => {
 	                 style={{transform: 'rotate(' + -allocatedRobot.rotate + 'deg)', position: "absolute",
                                  [rotate[allocatedRobot.rotate]['top']]: "5px", [rotate[allocatedRobot.rotate]['right']]: "5px"}} />
       </div>
-      <Control />
+      <Control allocatedRobot={allocatedRobot} />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAdjust, faArrowUp, faArrowLeft, faArrowDown, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import {url_control, autoLogoutTime_ms, initialSpeed, acceleration} from '../../conf'
+import {url_control, autoLogoutTime_ms, initialSpeedFallback, acceleration, steerInterval} from '../../conf'
 import axios from 'axios'
 
 let logoutTimeout: ReturnType<typeof setTimeout>
@@ -18,6 +18,7 @@ let lastKey:string = null
 let mleft = 0
 let mright = 0
 let speed:number = null
+let allocatedRobotInitialSpeed:number = null
 
 function steer() {
   let mleftAccelerated = speed * mleft
@@ -29,7 +30,7 @@ function steer() {
        .catch(() => speed = 0)
 }
 
-setInterval(() => steer(), 500)
+setInterval(() => steer(), steerInterval)
 
 function handler(direction:string, e:any) {
   resetLogoutTimeout()
@@ -39,7 +40,7 @@ function handler(direction:string, e:any) {
 
     mleft = 0
     mright = 0
-    speed = initialSpeed
+    speed = allocatedRobotInitialSpeed || initialSpeedFallback
 
     if(direction !== 'up') {
       if (e.key === 'w' || e.key === 'ArrowUp') {
@@ -82,7 +83,8 @@ const key = Key
 }
 
 
-export default () => {
+export default ({allocatedRobot}:any) => {
+  allocatedRobotInitialSpeed = allocatedRobot?.initialSpeed
   const [lampOn, setLampOn] = useState<boolean>(false)
 
   function lampToggle() {
