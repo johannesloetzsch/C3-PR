@@ -2,7 +2,7 @@
  {"name": "Glow",
   "img": "/robots/glow.jpg",
   "rotate": 90,
-  "ip": "192.168.100.201"},
+  "ip": "192.168.100.46"},
  {"name": "White",
   "img": "/robots/white.jpg",
   "rotate": 90,

@@ -41,7 +41,7 @@ nav a {
 .stream {
   display: table;
   position: fixed;
-  bottom: 0%;
+  bottom: 25%;
   left: 25%;
   max-width: 50%;
   max-height: 50%;
